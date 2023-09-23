@@ -27,6 +27,9 @@ VALIDATE(){
     fi
 }
 
+#copy mongo.repo file with vim path as in roboshop documentation
+#give validations for each ie copied & pasted from mongodb.md in roboshop documentation
+
 cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
 VALIDATE $? "Copied MongoDB repo into yum.repos.d"
 
