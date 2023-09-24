@@ -28,6 +28,7 @@ VALIDATE(){
 }
 
 yum install maven -y &>>$LOGFILE
+
 VALIDATE $? "Installing Maven"
 
 useradd roboshop &>>$LOGFILE
@@ -35,38 +36,50 @@ useradd roboshop &>>$LOGFILE
 mkdir /app &>>$LOGFILE
 
 curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>>$LOGFILE
+
 VALIDATE $? "Downloading shipping artifact"
 
-
-unzip /tmp/shipping.zip &>>$LOGFILE
-VALIDATE $? "Unzipping Shipping"
-
 cd /app &>>$LOGFILE
-VALIDATE $? "Moving into app directory"
+
+VALIDATE $? "Moving to app directory"
+ 
+unzip /tmp/shipping.zip &>>$LOGFILE
+
+VALIDATE $? "Unzipping shipping"
 
 mvn clean package &>>$LOGFILE
-VALIDATE $? "Maven clean Package"
+
+VALIDATE $? "packaging shipping app"
 
 mv target/shipping-1.0.jar shipping.jar &>>$LOGFILE
-VALIDATE $? "Renaming shipping.jar"
 
-cp /home/centos/roboshop-shell/roboshop.conf /systemd/system/shipping.service &>>$LOGFILE
-VALIDATE $? "Copying Shipping Service"
+VALIDATE $? "renaming shipping jar"
+
+cp /home/centos/roboshop-shell/shipping.service /etc/systemd/system/shipping.service &>>$LOGFILE
+
+VALIDATE $? "copying shipping service"
 
 systemctl daemon-reload &>>$LOGFILE
-VALIDATE $? "daemon reload"
 
-systemctl enable shipping &>> $LOGFILE
-VALIDATE $? "Enabling Shipping"
+VALIDATE $? "daemon-reload"
+
+systemctl enable shipping  &>>$LOGFILE
+
+VALIDATE $? "Enabling shipping"
 
 systemctl start shipping &>>$LOGFILE
-VALIDATE $? "Started Shipping"
 
-yum install mysql -y &>>$LOGFILE
-VALIDATE $? "Installing Mysql Client"
+VALIDATE $? "Starting shipping"
 
-mysql -h mysql.adithyaprakash.online -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>$LOGFILE
-VALIDATE $? "Loading cities and countries info"
+
+yum install mysql -y  &>>$LOGFILE
+
+VALIDATE $? "Installing MySQL client"
+
+mysql -h mysql.joindevops.online -uroot -pRoboShop@1 < /app/schema/shipping.sql  &>>$LOGFILE
+
+VALIDATE $? "Loaded countries and cities info"
 
 systemctl restart shipping &>>$LOGFILE
-VALIDATE $? "Restarting Shipping"
+
+VALIDATE $? "Restarting shipping"
