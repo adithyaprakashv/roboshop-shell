@@ -50,11 +50,8 @@ go build &>> $LOGFILE
 
 cp /home/centos/roboshop-shell/dispatch.service /etc/systemd/system/dispatch.service &>> $LOGFILE
 
-
 systemctl daemon-reload &>> $LOGFILE
 
-
 systemctl enable dispatch &>> $LOGFILE
-
 
 systemctl start dispatch &>> $LOGFILE
