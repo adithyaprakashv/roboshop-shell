@@ -28,14 +28,13 @@ VALIDATE(){
 }
 
 yum install golang -y &>> $LOGFILE
-validate $? "Installing Golang"
+
 
 useradd roboshop &>> $LOGFILE
 
 mkdir /app &>> $LOGFILE
 
 curl -L -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip &>> $LOGFILE
-validate $? "Downloadin application code"
 
 cd /app &>> $LOGFILE
 
@@ -50,13 +49,12 @@ go get &>> $LOGFILE
 go build &>> $LOGFILE
 
 cp /home/centos/roboshop-shell/dispatch.service /etc/systemd/system/dispatch.service &>> $LOGFILE
-validate $? "Copying dispatch service"
+
 
 systemctl daemon-reload &>> $LOGFILE
-validate $? "Daemong-reload"
+
 
 systemctl enable dispatch &>> $LOGFILE
-validate $? "Enabling Dispatch"
+
 
 systemctl start dispatch &>> $LOGFILE
-validate $? "Starting Dispatch"
